@@ -103,7 +103,7 @@ public class ReactiveInsertByIdOperationSupport implements ReactiveInsertByIdOpe
 					.just(template.getCouchbaseClientFactory().withScope(pArgs.getScope()).getCollection(pArgs.getCollection()))
 					.flatMap(collection -> support.encodeEntity(object)
 							.flatMap(converted -> TransactionalSupport.checkForTransactionInThreadLocalStorage().flatMap(ctxOpt -> {
-								if (!ctxOpt.isPresent()) {
+								if (ctxOpt.isEmpty()) {
 									return collection.reactive()
 											.insert(converted.getId().toString(), converted.export(),
 													buildOptions(pArgs.getOptions(), converted))
@@ -124,8 +124,8 @@ public class ReactiveInsertByIdOperationSupport implements ReactiveInsertByIdOpe
 													null, null));
 								}
 							})).onErrorMap(throwable -> {
-								if (throwable instanceof RuntimeException) {
-									return template.potentiallyConvertRuntimeException((RuntimeException) throwable);
+								if (throwable instanceof RuntimeException exception) {
+									return template.potentiallyConvertRuntimeException(exception);
 								} else {
 									return throwable;
 								}

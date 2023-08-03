@@ -63,8 +63,8 @@ public class CouchbasePersistentEntityIndexCreator implements ApplicationListene
 		PersistentEntity<?, ?> entity = event.getPersistentEntity();
 
 		// Double check type as Spring infrastructure does not consider nested generics
-		if (entity instanceof CouchbasePersistentEntity) {
-			checkForIndexes((CouchbasePersistentEntity<?>) entity);
+		if (entity instanceof CouchbasePersistentEntity persistentEntity) {
+			checkForIndexes(persistentEntity);
 		}
 	}
 
@@ -86,8 +86,8 @@ public class CouchbasePersistentEntityIndexCreator implements ApplicationListene
 		if (entity.isAnnotationPresent(Document.class)) {
 
 			for (IndexDefinition indexDefinition : indexResolver.resolveIndexFor(entity.getTypeInformation())) {
-				IndexDefinitionHolder indexToCreate = indexDefinition instanceof IndexDefinitionHolder
-						? (IndexDefinitionHolder) indexDefinition
+				IndexDefinitionHolder indexToCreate = indexDefinition instanceof IndexDefinitionHolder idh
+						? idh
 						: new IndexDefinitionHolder(indexDefinition.getIndexFields(), indexDefinition.getIndexName(),
 								indexDefinition.getIndexPredicate());
 

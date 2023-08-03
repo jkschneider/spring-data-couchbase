@@ -104,7 +104,7 @@ public class ReactiveFindByIdOperationSupport implements ReactiveFindByIdOperati
 					.getCollection(pArgs.getCollection()).reactive();
 
 			Mono<T> reactiveEntity = TransactionalSupport.checkForTransactionInThreadLocalStorage().flatMap(ctxOpt -> {
-				if (!ctxOpt.isPresent()) {
+				if (ctxOpt.isEmpty()) {
 					if (pArgs.getOptions() instanceof GetAndTouchOptions options) {
 						return rc.getAndTouch(id.toString(), expiryToUse, options)
 								.flatMap(result -> support.decodeEntity(id, result.contentAs(String.class), result.cas(), domainType,
@@ -132,8 +132,8 @@ public class ReactiveFindByIdOperationSupport implements ReactiveFindByIdOperati
 				}
 				return Mono.error(throwable);
 			}).onErrorMap(throwable -> {
-				if (throwable instanceof RuntimeException) {
-					return template.potentiallyConvertRuntimeException((RuntimeException) throwable);
+				if (throwable instanceof RuntimeException exception) {
+					return template.potentiallyConvertRuntimeException(exception);
 				} else {
 					return throwable;
 				}

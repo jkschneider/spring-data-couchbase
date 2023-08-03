@@ -131,10 +131,10 @@ public class CouchbaseList implements CouchbaseStorable {
 
 		int totalSize = thisSize;
 		for (Object value : payload) {
-			if (value instanceof CouchbaseDocument) {
-				totalSize += ((CouchbaseDocument) value).size(true);
-			} else if (value instanceof CouchbaseList) {
-				totalSize += ((CouchbaseList) value).size(true);
+			if (value instanceof CouchbaseDocument document) {
+				totalSize += document.size(true);
+			} else if (value instanceof CouchbaseList list) {
+				totalSize += list.size(true);
 			}
 		}
 
@@ -153,12 +153,12 @@ public class CouchbaseList implements CouchbaseStorable {
 
 		int elem = 0;
 		for (Object entry : payload) {
-			if (entry instanceof CouchbaseDocument) {
+			if (entry instanceof CouchbaseDocument document) {
 				toExport.remove(elem);
-				toExport.add(elem, ((CouchbaseDocument) entry).export());
-			} else if (entry instanceof CouchbaseList) {
+				toExport.add(elem, document.export());
+			} else if (entry instanceof CouchbaseList list) {
 				toExport.remove(elem);
-				toExport.add(elem, ((CouchbaseList) entry).export());
+				toExport.add(elem, list.export());
 			}
 			elem++;
 		}

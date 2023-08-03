@@ -58,8 +58,10 @@ public class BasicCouchbasePersistentEntity<T> extends BasicPersistentEntity<T, 
 	private void validateExpirationConfiguration() {
 		Document annotation = getType().getAnnotation(Document.class);
 		if (annotation != null && annotation.expiry() > 0 && StringUtils.hasLength(annotation.expiryExpression())) {
-			String msg = String.format("Incorrect expiry configuration on class %s using %s. "
-					+ "You cannot use 'expiry' and 'expiryExpression' at the same time", getType().getName(), annotation);
+			String msg = ("""
+			Incorrect expiry configuration on class %s using %s. \
+			You cannot use 'expiry' and 'expiryExpression' at the same time\
+			""").formatted(getType().getName(), annotation);
 			throw new IllegalArgumentException(msg);
 		}
 	}
@@ -67,8 +69,10 @@ public class BasicCouchbasePersistentEntity<T> extends BasicPersistentEntity<T, 
 	private void validateDurabilityConfiguration() {
 		Document annotation = getType().getAnnotation(Document.class);
 		if (annotation != null && annotation.durabilityLevel() != DurabilityLevel.NONE && StringUtils.hasLength(annotation.durabilityExpression())) {
-			String msg = String.format("Incorrect durability configuration on class %s using %s. "
-					+ "You cannot use 'durabilityLevel' and 'durabilityExpression' at the same time", getType().getName(), annotation);
+			String msg = ("""
+			Incorrect durability configuration on class %s using %s. \
+			You cannot use 'durabilityLevel' and 'durabilityExpression' at the same time\
+			""").formatted(getType().getName(), annotation);
 			throw new IllegalArgumentException(msg);
 		}
 	}
@@ -102,9 +106,9 @@ public class BasicCouchbasePersistentEntity<T> extends BasicPersistentEntity<T, 
 			return null;
 		} else {
 			// do not allow two @Id fields or two fields named id (possible via @Field)
-			throw new MappingException(String.format(
-					"Attempt to add id property %s but already have property %s registered as id. Check your mapping configuration!",
-					property.getField(), getIdProperty().getField()));
+			throw new MappingException(
+			"Attempt to add id property %s but already have property %s registered as id. Check your mapping configuration!".formatted(
+		property.getField(), getIdProperty().getField()));
 		}
 
 	}

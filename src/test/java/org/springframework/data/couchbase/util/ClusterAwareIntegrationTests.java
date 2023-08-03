@@ -196,11 +196,11 @@ public abstract class ClusterAwareIntegrationTests {
     public static void logCluster(Cluster cluster, String s) {
         if (cluster == null || disconnectedMap.contains(cluster.core().context().id())) {
             org.slf4j.LoggerFactory.getLogger("com.couchbase.core").info("CoreDisconnectedAutoAlready:\"coreId\":\""
-                    + String.format("0x%16x", 0) + "auto missed<" + s + ">\"");
+                    + "0x%16x".formatted(0) + "auto missed<" + s + ">\"");
         } else {
             disconnectedMap.add(cluster.core().context().id());
             org.slf4j.LoggerFactory.getLogger("com.couchbase.core").info("CoreDisconnectedAuto:\"coreId\":\""
-                    + String.format("0x%x", cluster.core().context().id()) + "(" + s + ")\"");
+                    + "0x%x".formatted(cluster.core().context().id()) + "(" + s + ")\"");
             //cluster.environment().shutdown(Duration.ofSeconds(60)); needs to happend after auto disconnect()
         }
     }
@@ -208,11 +208,11 @@ public abstract class ClusterAwareIntegrationTests {
     public static void logDisconnect(Cluster cluster, String s) {
         if (cluster == null || disconnectedMap.contains(cluster.core().context().id())) {
             org.slf4j.LoggerFactory.getLogger("com.couchbase.core").info(
-                    "CoreDisconnectedAlready:\"coreId\":\"" + String.format("0x%16x", 0) + " missed{" + s + "}\"");
+                    "CoreDisconnectedAlready:\"coreId\":\"" + "0x%16x".formatted(0) + " missed{" + s + "}\"");
         } else {
             disconnectedMap.add(cluster.core().context().id());
             org.slf4j.LoggerFactory.getLogger("com.couchbase.core").info("CoreDisconnected:\"coreId\":\""
-                    + String.format("0x%x", cluster.core().context().id()) + "[" + s + "]\"");
+                    + "0x%x".formatted(cluster.core().context().id()) + "[" + s + "]\"");
             cluster.disconnect();
             cluster.environment().shutdown(Duration.ofSeconds(60));
         }

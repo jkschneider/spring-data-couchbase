@@ -165,14 +165,14 @@ public abstract class AbstractCouchbaseQueryDSL<Q extends AbstractCouchbaseQuery
 	}
 
 	protected Map<String, String> createProjection(Expression<?> projection) {
-		if (projection instanceof FactoryExpression) {
+		if (projection instanceof FactoryExpression expression) {
 			Map<String, String> obj = new HashMap();
-			Iterator var3 = ((FactoryExpression) projection).getArgs().iterator();
+			Iterator var3 = expression.getArgs().iterator();
 
 			while (var3.hasNext()) {
 				Object expr = var3.next();
-				if (expr instanceof Expression) {
-					obj.put(expr.toString(), (String) this.serializer.handle((Expression) expr));
+				if (expr instanceof Expression expression) {
+					obj.put(expr.toString(), (String) this.serializer.handle(expression));
 				}
 			}
 			return obj;

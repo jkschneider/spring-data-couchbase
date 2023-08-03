@@ -48,8 +48,8 @@ public class DynamicInvocationHandler<T> implements InvocationHandler {
 
 	public DynamicInvocationHandler(T target, CommonOptions<?> options, String collection, String scope) {
 		this.target = target;
-		if (target instanceof CouchbaseRepository) {
-			reactiveTemplate = ((CouchbaseTemplate) ((CouchbaseRepository) target).getOperations()).reactive();
+		if (target instanceof CouchbaseRepository repository) {
+			reactiveTemplate = ((CouchbaseTemplate) repository.getOperations()).reactive();
 			this.entityInformation = ((CouchbaseRepository<?, String>) target).getEntityInformation();
 		} else if (target instanceof ReactiveCouchbaseRepository) {
 			reactiveTemplate = (ReactiveCouchbaseTemplate) ((ReactiveCouchbaseRepository) this.target).getOperations();

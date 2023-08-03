@@ -52,7 +52,7 @@ public class CouchbaseRepositoryExtension extends CdiRepositoryExtensionSupport 
 	<T> void processBean(@Observes ProcessBean<T> processBean) {
 		Bean<T> bean = processBean.getBean();
 		for (Type type : bean.getTypes()) {
-			if (type instanceof Class<?> && CouchbaseOperations.class.isAssignableFrom((Class<?>) type)) {
+			if (type instanceof Class<?> class1 && CouchbaseOperations.class.isAssignableFrom(class1)) {
 				couchbaseOperationsMap.put(bean.getQualifiers(), ((Bean<CouchbaseOperations>) bean));
 			}
 		}
@@ -93,8 +93,8 @@ public class CouchbaseRepositoryExtension extends CdiRepositoryExtensionSupport 
 		Bean<CouchbaseOperations> couchbaseOperationsBean = this.couchbaseOperationsMap.get(qualifiers);
 
 		if (couchbaseOperationsBean == null) {
-			throw new UnsatisfiedResolutionException(String.format("Unable to resolve a bean for '%s' with qualifiers %s.",
-					CouchbaseOperations.class.getName(), qualifiers));
+			throw new UnsatisfiedResolutionException("Unable to resolve a bean for '%s' with qualifiers %s.".formatted(
+			CouchbaseOperations.class.getName(), qualifiers));
 		}
 
 		return new CouchbaseRepositoryBean<T>(couchbaseOperationsBean, qualifiers, repositoryType, beanManager,

@@ -142,7 +142,7 @@ public class N1qlQueryCreator extends AbstractQueryCreator<Query, QueryCriteria>
 		} else if (part.shouldIgnoreCase() == Part.IgnoreCaseType.ALWAYS) {
 			if (!isString) {
 				throw new IllegalArgumentException(
-						String.format("Part %s must be of type String but was %s", fieldNamePath, leafType));
+				"Part %s must be of type String but was %s".formatted(fieldNamePath, leafType));
 			}
 			ignoreCase = true;
 		}

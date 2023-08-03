@@ -135,8 +135,10 @@ public interface AirportRepository extends CouchbaseRepository<Airport, String>,
 	@ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
 	long count();
 
-	@Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter}  #{#projectIds != null ? 'AND iata IN $1' : ''} "
-			+ " #{#planIds != null ? 'AND icao IN $2' : ''}  #{#active != null ? 'AND false = $3' : ''} ")
+	@Query("""
+			#{#n1ql.selectEntity} WHERE #{#n1ql.filter}  #{#projectIds != null ? 'AND iata IN $1' : ''} \
+			 #{#planIds != null ? 'AND icao IN $2' : ''}  #{#active != null ? 'AND false = $3' : ''} \
+			""")
 	@ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
 	Long countFancyExpression(@Param("projectIds") List<String> projectIds, @Param("planIds") List<String> planIds,
 			@Param("active") Boolean active);
@@ -181,8 +183,12 @@ public interface AirportRepository extends CouchbaseRepository<Airport, String>,
 	@ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
 	Long countDistinctIcaoBy();
 
-	@Query("SELECT 1 FROM #{#n1ql.bucket} WHERE #{#n1ql.filter} " + " #{#projectIds != null ? 'AND blah IN $1' : ''} "
-			+ " #{#planIds != null ? 'AND blahblah IN $2' : ''} " + " #{#active != null ? 'AND false = $3' : ''} ")
+	@Query("""
+			SELECT 1 FROM #{#n1ql.bucket} WHERE #{#n1ql.filter} \
+			 #{#projectIds != null ? 'AND blah IN $1' : ''} \
+			 #{#planIds != null ? 'AND blahblah IN $2' : ''} \
+			 #{#active != null ? 'AND false = $3' : ''} \
+			""")
 	Long countOne();
 
 	@ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)

@@ -454,11 +454,11 @@ public class QueryCriteria implements QueryCriteriaDefinition {
 				}
 				if (o[0] instanceof Object[]) {
 					value[0] = o[0];
-				} else if (o[0] instanceof JsonArray) {
-					JsonArray ja = ((JsonArray) o[0]);
+				} else if (o[0] instanceof JsonArray array) {
+					JsonArray ja =array;
 					value[0] = ja.toList().toArray();
-				} else if (o[0] instanceof List) {
-					List l = ((List) o[0]);
+				} else if (o[0] instanceof List list) {
+					List l =list;
 					value[0] = l.toArray();
 				}
 			} else {
@@ -559,8 +559,8 @@ public class QueryCriteria implements QueryCriteriaDefinition {
 		v[0] = fieldName;
 		v[1] = operator;
 		for (int i = 0; i < valueLen; i++) {
-			if (value[i] instanceof QueryCriteria) {
-				v[i + 2] = "(" + ((QueryCriteria) value[i]).export(paramIndexPtr, parameters, converter) + ")";
+			if (value[i] instanceof QueryCriteria criteria) {
+				v[i + 2] = "(" + criteria.export(paramIndexPtr, parameters, converter) + ")";
 			} else {
 				v[i + 2] = maybeWrapValue(key, value[i], paramIndexPtr, parameters, converter);
 			}
@@ -607,8 +607,8 @@ public class QueryCriteria implements QueryCriteriaDefinition {
 				try {
 					params.put(key.toString(), convert(converter, value));
 				} catch (InvalidArgumentException iae) {
-					if (value instanceof Object[]) {
-						params.put(key.toString(), JsonArray.from((Object[]) value));
+					if (value instanceof Object[] objects) {
+						params.put(key.toString(), JsonArray.from(objects));
 					} else {
 						throw iae;
 					}
@@ -623,10 +623,9 @@ public class QueryCriteria implements QueryCriteriaDefinition {
 			return "\"" + value + "\"";
 		} else if (value == null) {
 			return "null";
-		} else if (value instanceof Object[]) { // convert array into sequence of comma-separated values
+		} else if (value instanceof Object[] array) { // convert array into sequence of comma-separated values
 			StringBuilder l = new StringBuilder();
 			l.append("[");
-			Object[] array = (Object[]) value;
 			for (int i = 0; i < array.length; i++) {
 				if (i > 0) {
 					l.append(",");
@@ -659,8 +658,8 @@ public class QueryCriteria implements QueryCriteriaDefinition {
 	 * @return the target collection.
 	 */
 	private static Collection<?> asCollection(final Object source) {
-		if (source instanceof Collection) {
-			return (Collection<?>) source;
+		if (source instanceof Collection collection) {
+			return collection;
 		}
 		return source.getClass().isArray() ? CollectionUtils.arrayToList(source) : Collections.singleton(source);
 	}

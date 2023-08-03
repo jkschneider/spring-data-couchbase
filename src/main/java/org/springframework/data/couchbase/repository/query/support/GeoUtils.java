@@ -112,19 +112,18 @@ public class GeoUtils {
 	 * @throws IllegalArgumentException if the {@link Shape} is unsupported.
 	 */
 	public static void convertShapeTo2DRanges(JsonArray startRange, JsonArray endRange, Shape shape) {
-		if (shape instanceof Box) {
-			Box box = (Box) shape;
+		if (shape instanceof Box box) {
 			startRange // add minimum coordinates for x and y
 					.add(box.getFirst().getX()).add(box.getFirst().getY());
 			endRange // add maximum coordinates for x and y
 					.add(box.getSecond().getX()).add(box.getSecond().getY());
-		} else if (shape instanceof Polygon) {
+		} else if (shape instanceof Polygon polygon) {
 			// find the lowest and highest X and Y to get the bounding box
 			double xMin = Double.POSITIVE_INFINITY;
 			double yMin = Double.POSITIVE_INFINITY;
 			double xMax = Double.NEGATIVE_INFINITY;
 			double yMax = Double.NEGATIVE_INFINITY;
-			for (Point point : (Polygon) shape) {
+			for (Point point : polygon) {
 				xMin = point.getX() < xMin ? point.getX() : xMin;
 				xMax = point.getX() > xMax ? point.getX() : xMax;
 
@@ -135,9 +134,7 @@ public class GeoUtils {
 			// once we have the coordinates of lower left and upper right points, use them
 			startRange.add(xMin).add(yMin);
 			endRange.add(xMax).add(yMax);
-		} else if (shape instanceof Circle) {
-			// here the bounding box is the box that contains the circle
-			Circle circle = (Circle) shape;
+		} else if (shape instanceof Circle circle) {
 			Point center = circle.getCenter();
 			double radius = circle.getRadius().getNormalizedValue();
 

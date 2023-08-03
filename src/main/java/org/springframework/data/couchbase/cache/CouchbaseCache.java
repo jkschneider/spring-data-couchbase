@@ -100,10 +100,12 @@ public class CouchbaseCache extends AbstractValueAdaptingCache {
 	public void put(final Object key, final Object value) {
 		if (!isAllowNullValues() && value == null) {
 
-			throw new IllegalArgumentException(String.format(
-					"Cache '%s' does not allow 'null' values. Avoid storing null via '@Cacheable(unless=\"#result == null\")' or "
-							+ "configure CouchbaseCache to allow 'null' via CouchbaseCacheConfiguration.",
-					name));
+			throw new IllegalArgumentException((
+			"""
+			Cache '%s' does not allow 'null' values. Avoid storing null via '@Cacheable(unless="#result == null")' or \
+			configure CouchbaseCache to allow 'null' via CouchbaseCacheConfiguration.\
+			""").formatted(
+			name));
 		}
 
 		cacheWriter.put(cacheConfig.getCollectionName(), createCacheKey(key), toStoreValue(value), cacheConfig.getExpiry(),
@@ -168,8 +170,8 @@ public class CouchbaseCache extends AbstractValueAdaptingCache {
 	 * @throws IllegalStateException if {@code key} cannot be converted to {@link String}.
 	 */
 	protected String convertKey(final Object key) {
-		if (key instanceof String) {
-			return (String) key;
+		if (key instanceof String string) {
+			return string;
 		}
 
 		TypeDescriptor source = TypeDescriptor.forObject(key);
@@ -191,10 +193,12 @@ public class CouchbaseCache extends AbstractValueAdaptingCache {
 			return key.toString();
 		}
 
-		throw new IllegalStateException(String.format(
-				"Cannot convert cache key %s to String. Please register a suitable Converter via "
-						+ "'CouchbaseCacheConfiguration.configureKeyConverters(...)' or override '%s.toString()'.",
-				source, key.getClass().getSimpleName()));
+		throw new IllegalStateException((
+		"""
+		Cannot convert cache key %s to String. Please register a suitable Converter via \
+		'CouchbaseCacheConfiguration.configureKeyConverters(...)' or override '%s.toString()'.\
+		""").formatted(
+		source, key.getClass().getSimpleName()));
 	}
 
 	private String prefixCacheKey(final String key) {
@@ -228,7 +232,7 @@ public class CouchbaseCache extends AbstractValueAdaptingCache {
 			return "[" + sj.toString() + "]";
 		}
 
-		throw new IllegalArgumentException(String.format("Cannot convert cache key %s to String.", key));
+		throw new IllegalArgumentException("Cannot convert cache key %s to String.".formatted(key));
 	}
 
 }

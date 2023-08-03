@@ -55,7 +55,7 @@ public class N1qlQueryCreatorUtils {
 		} else if (part.shouldIgnoreCase() == Part.IgnoreCaseType.ALWAYS) {
 			if (!isString) {
 				throw new IllegalArgumentException(
-						String.format("Part %s must be of type String but was %s", fieldNamePath, leafType));
+				"Part %s must be of type String but was %s".formatted(fieldNamePath, leafType));
 			}
 			ignoreCase = true;
 		}
@@ -188,8 +188,7 @@ public class N1qlQueryCreatorUtils {
 		}
 
 		N1QLExpression converted;
-		if (next instanceof String) {
-			String pattern = (String) next;
+		if (next instanceof String pattern) {
 			if (anyPrefix) {
 				pattern = "%" + pattern;
 			}
@@ -220,8 +219,8 @@ public class N1qlQueryCreatorUtils {
 		Object next = parameterValues.next();
 
 		Object[] values;
-		if (next instanceof Collection) {
-			values = ((Collection<?>) next).toArray();
+		if (next instanceof Collection collection) {
+			values = collection.toArray();
 		} else if (next.getClass().isArray()) {
 			values = (Object[]) next;
 		} else {

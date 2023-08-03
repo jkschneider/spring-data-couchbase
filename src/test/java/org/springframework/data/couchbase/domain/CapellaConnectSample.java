@@ -114,7 +114,7 @@ public class CapellaConnectSample {
 		System.err.println(collection.get("u:king_arthur"));
 
 		// Perform a N1QL Query
-		QueryResult result = cluster.query(String.format("SELECT name FROM `%s` WHERE $1 IN interests", bucketName),
+		QueryResult result = cluster.query("SELECT name FROM `%s` WHERE $1 IN interests".formatted(bucketName),
 				queryOptions().parameters(JsonArray.from("African Swallows")));
 
 		// Print each found Row

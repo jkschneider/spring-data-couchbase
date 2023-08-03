@@ -132,11 +132,11 @@ public class CouchbaseCallbackTransactionManager implements CallbackPreferringPl
 	}
 
 	private static RuntimeException convert(RuntimeException ex) {
-		if (ex instanceof TransactionCommitAmbiguousException) {
-			return new TransactionSystemAmbiguousException((TransactionCommitAmbiguousException) ex);
+		if (ex instanceof TransactionCommitAmbiguousException exception) {
+			return new TransactionSystemAmbiguousException(exception);
 		}
-		if (ex instanceof TransactionFailedException) {
-			return new TransactionSystemUnambiguousException((TransactionFailedException) ex);
+		if (ex instanceof TransactionFailedException exception) {
+			return new TransactionSystemUnambiguousException(exception);
 		}
 		// Should not get here
 		return ex;
@@ -182,8 +182,8 @@ public class CouchbaseCallbackTransactionManager implements CallbackPreferringPl
 			});
 
 		}, this.options).thenMany(Flux.defer(() -> Flux.fromIterable(out))).onErrorMap(ex -> {
-			if (ex instanceof RuntimeException) {
-				return convert((RuntimeException) ex);
+			if (ex instanceof RuntimeException exception) {
+				return convert(exception);
 			}
 			return ex;
 		});

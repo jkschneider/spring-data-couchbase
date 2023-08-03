@@ -60,8 +60,8 @@ public class CouchbasePersistentEntityIndexResolver implements QueryIndexResolve
 	public List<IndexDefinitionHolder> resolveIndexForEntity(final CouchbasePersistentEntity<?> root) {
 		Assert.notNull(root, "CouchbasePersistentEntity must not be null!");
 		Document document = root.findAnnotation(Document.class);
-		Assert.notNull(document, () -> String
-				.format("Entity %s is not a collection root. Make sure to annotate it with @Document!", root.getName()));
+		Assert.notNull(document, () -> "Entity %s is not a collection root. Make sure to annotate it with @Document!"
+		.formatted(root.getName()));
 
 		List<IndexDefinitionHolder> indexInformation = new ArrayList<>();
 

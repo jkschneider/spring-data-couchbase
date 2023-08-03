@@ -106,7 +106,7 @@ public class ReactiveReplaceByIdOperationSupport implements ReactiveReplaceByIdO
 					.just(template.getCouchbaseClientFactory().withScope(pArgs.getScope()).getCollection(pArgs.getCollection()))
 					.flatMap(collection -> support.encodeEntity(object)
 							.flatMap(converted -> TransactionalSupport.checkForTransactionInThreadLocalStorage().flatMap(ctxOpt -> {
-								if (!ctxOpt.isPresent()) {
+								if (ctxOpt.isEmpty()) {
 									return collection.reactive()
 											.replace(converted.getId().toString(), converted.export(),
 													buildReplaceOptions(pArgs.getOptions(), object, converted))
@@ -141,8 +141,8 @@ public class ReactiveReplaceByIdOperationSupport implements ReactiveReplaceByIdO
 											result -> support.applyResult(object, converted, converted.getId(), result.cas(), null, null));
 								}
 							})).onErrorMap(throwable -> {
-								if (throwable instanceof RuntimeException) {
-									return template.potentiallyConvertRuntimeException((RuntimeException) throwable);
+								if (throwable instanceof RuntimeException exception) {
+									return template.potentiallyConvertRuntimeException(exception);
 								} else {
 									return throwable;
 								}

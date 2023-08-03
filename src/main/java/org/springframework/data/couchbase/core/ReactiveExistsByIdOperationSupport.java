@@ -86,8 +86,8 @@ public class ReactiveExistsByIdOperationSupport implements ReactiveExistsByIdOpe
 							.getCollection(pArgs.getCollection()).reactive().exists(id, buildOptions(pArgs.getOptions()))
 							.map(ExistsResult::exists))
 					.onErrorMap(throwable -> {
-						if (throwable instanceof RuntimeException) {
-							return template.potentiallyConvertRuntimeException((RuntimeException) throwable);
+						if (throwable instanceof RuntimeException exception) {
+							return template.potentiallyConvertRuntimeException(exception);
 						} else {
 							return throwable;
 						}

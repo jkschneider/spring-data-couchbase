@@ -320,8 +320,8 @@ public class JavaIntegrationTests extends ClusterAwareIntegrationTests {
 	private static final Map<Predicate<QueryException>, Function<QueryException, ? extends QueryException>> errorMessageMap = new LinkedHashMap<>();
 
 	private static RuntimeException translateException(Throwable t) {
-		if (t instanceof QueryException) {
-			final QueryException e = ((QueryException) t);
+		if (t instanceof QueryException exception) {
+			final QueryException e =exception;
 
 			for (Map.Entry<Predicate<QueryException>, Function<QueryException, ? extends QueryException>> entry : errorMessageMap
 					.entrySet()) {
@@ -330,7 +330,7 @@ public class JavaIntegrationTests extends ClusterAwareIntegrationTests {
 				}
 			}
 		}
-		return (t instanceof RuntimeException) ? (RuntimeException) t : new RuntimeException(t);
+		return (t instanceof RuntimeException re) ? re : new RuntimeException(t);
 	}
 
 	public static void createFtsCollectionIndex(Cluster cluster, String indexName, String bucketName, String scopeName,

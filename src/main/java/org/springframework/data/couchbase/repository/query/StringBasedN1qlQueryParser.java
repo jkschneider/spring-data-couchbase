@@ -403,9 +403,11 @@ public class StringBasedN1qlQueryParser {
 			if (checkNotQuoted(placeholder, positionMatcher.start(), positionMatcher.end(), quotes, queryIdentifier)) {
 				if (this.queryMethod == null) {
 					throw new IllegalArgumentException(
-							"StringQuery created from StringQuery(String) cannot have parameters. "
-									+ "They cannot be processed. "
-									+ "Use an @Query annotated method and the SPEL Expression #{[<n>]} : " + statement);
+							"""
+									StringQuery created from StringQuery(String) cannot have parameters. \
+									They cannot be processed. \
+									Use an @Query annotated method and the SPEL Expression #{[<n>]} : \
+									""" + statement);
 				}
 				LOGGER.trace("{}: Found positional placeholder {}", queryIdentifier, placeholder);
 				posCount++;
@@ -419,8 +421,10 @@ public class StringBasedN1qlQueryParser {
 			if (checkNotQuoted(placeholder, namedMatcher.start(), namedMatcher.end(), quotes, queryIdentifier)) {
 				if (this.queryMethod == null) {
 					throw new IllegalArgumentException(
-							"StringQuery created from StringQuery(String) cannot have parameters. "
-									+ "Use an @Query annotated method and the SPEL Expression #{[<n>]} : " + statement);
+							"""
+									StringQuery created from StringQuery(String) cannot have parameters. \
+									Use an @Query annotated method and the SPEL Expression #{[<n>]} : \
+									""" + statement);
 				}
 				LOGGER.trace("{}: Found named placeholder {}", queryIdentifier, placeholder);
 				namedCount++;
@@ -449,8 +453,10 @@ public class StringBasedN1qlQueryParser {
 				if (checkNotQuoted(placeholder, spelMatcher.start(), spelMatcher.end(), quotes, queryIdentifier)) {
 					if (this.queryMethod == null) {
 						throw new IllegalArgumentException(
-								"StringQuery created from StringQuery(String) cannot SPEL expressions. "
-										+ "Use an @Query annotated method and the SPEL Expression #{[<n>]} : "
+								"""
+										StringQuery created from StringQuery(String) cannot SPEL expressions. \
+										Use an @Query annotated method and the SPEL Expression #{[<n>]} : \
+										"""
 										+ statement);
 					}
 					LOGGER.trace("{}: Found SPEL Experssion {}", queryIdentifier, placeholder);
@@ -481,11 +487,11 @@ public class StringBasedN1qlQueryParser {
 		for (Parameter parameter : this.queryMethod.getParameters().getBindableParameters()) {
 			Object rawValue = accessor.getBindableValue(parameter.getIndex());
 			Object value = couchbaseConverter.convertForWriteIfNeeded(rawValue);
-			if (value instanceof CouchbaseDocument) {
-				value = ((CouchbaseDocument) value).export();
+			if (value instanceof CouchbaseDocument document) {
+				value = document.export();
 			}
-			if (value instanceof CouchbaseList) {
-				value = ((CouchbaseList) value).export();
+			if (value instanceof CouchbaseList list) {
+				value = list.export();
 			}
 			putPositionalValue(posValues, value);
 		}
@@ -505,11 +511,11 @@ public class StringBasedN1qlQueryParser {
 			String placeholder = parameter.getPlaceholder();
 			Object rawValue = accessor.getBindableValue(parameter.getIndex());
 			Object value = couchbaseConverter.convertForWriteIfNeeded(rawValue);
-			if (value instanceof CouchbaseDocument) {
-				value = ((CouchbaseDocument) value).export();
+			if (value instanceof CouchbaseDocument document) {
+				value = document.export();
 			}
-			if (value instanceof CouchbaseList) {
-				value = ((CouchbaseList) value).export();
+			if (value instanceof CouchbaseList list) {
+				value = list.export();
 			}
 			if (placeholder != null && placeholder.charAt(0) == ':') {
 				placeholder = placeholder.replaceFirst(":", "");

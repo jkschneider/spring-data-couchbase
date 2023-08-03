@@ -187,7 +187,7 @@ public class ReactiveFindByQueryOperationSupport implements ReactiveFindByQueryO
 			ReactiveScope rs = clientFactory.withScope(pArgs.getScope()).getScope().reactive();
 
 			Mono<Object> allResult = TransactionalSupport.checkForTransactionInThreadLocalStorage().flatMap(s -> {
-				if (!s.isPresent()) {
+				if (s.isEmpty()) {
 					QueryOptions opts = buildOptions(pArgs.getOptions());
 					return pArgs.getScope() == null ? clientFactory.getCluster().reactive().query(statement, opts)
 							: rs.query(statement, opts);
@@ -200,12 +200,12 @@ public class ReactiveFindByQueryOperationSupport implements ReactiveFindByQueryO
 			});
 
 			return allResult.onErrorMap(throwable -> {
-				if (throwable instanceof RuntimeException) {
-					return template.potentiallyConvertRuntimeException((RuntimeException) throwable);
+				if (throwable instanceof RuntimeException exception) {
+					return template.potentiallyConvertRuntimeException(exception);
 				} else {
 					return throwable;
 				}
-			}).flatMapMany(o -> o instanceof ReactiveQueryResult ? ((ReactiveQueryResult) o).rowsAsObject()
+			}).flatMapMany(o -> o instanceof ReactiveQueryResult rqr ? rqr.rowsAsObject()
 					: Flux.fromIterable(((TransactionQueryResult) o).rowsAsObject())).flatMap(row -> {
 						String id = "";
 						Long cas = Long.valueOf(0);
@@ -250,7 +250,7 @@ public class ReactiveFindByQueryOperationSupport implements ReactiveFindByQueryO
 			ReactiveScope rs = clientFactory.withScope(pArgs.getScope()).getScope().reactive();
 
 			Mono<Object> allResult = TransactionalSupport.checkForTransactionInThreadLocalStorage().flatMap(s -> {
-				if (!s.isPresent()) {
+				if (s.isEmpty()) {
 					QueryOptions opts = buildOptions(pArgs.getOptions());
 					return pArgs.getScope() == null ? clientFactory.getCluster().reactive().query(statement, opts)
 							: rs.query(statement, opts);
@@ -262,12 +262,12 @@ public class ReactiveFindByQueryOperationSupport implements ReactiveFindByQueryO
 			});
 
 			return allResult.onErrorMap(throwable -> {
-				if (throwable instanceof RuntimeException) {
-					return template.potentiallyConvertRuntimeException((RuntimeException) throwable);
+				if (throwable instanceof RuntimeException exception) {
+					return template.potentiallyConvertRuntimeException(exception);
 				} else {
 					return throwable;
 				}
-			}).flatMapMany(o -> o instanceof ReactiveQueryResult ? ((ReactiveQueryResult) o).rowsAsObject()
+			}).flatMapMany(o -> o instanceof ReactiveQueryResult rqr ? rqr.rowsAsObject()
 					: Flux.fromIterable(((TransactionQueryResult) o).rowsAsObject()))
 					.map(row -> row.getLong(row.getNames().iterator().next())).next();
 		}

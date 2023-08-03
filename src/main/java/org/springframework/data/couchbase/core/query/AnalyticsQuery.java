@@ -97,8 +97,10 @@ public class AnalyticsQuery {
 		sb.append(" ORDER BY ");
 		sort.stream().forEach(order -> {
 			if (order.isIgnoreCase()) {
-				throw new IllegalArgumentException(String.format("Given sort contained an Order for %s with ignore case! "
-						+ "Couchbase N1QL does not support sorting ignoring case currently!", order.getProperty()));
+				throw new IllegalArgumentException(("""
+				Given sort contained an Order for %s with ignore case! \
+				Couchbase N1QL does not support sorting ignoring case currently!\
+				""").formatted(order.getProperty()));
 			}
 			sb.append(order.getProperty()).append(" ").append(order.isAscending() ? "ASC," : "DESC,");
 		});

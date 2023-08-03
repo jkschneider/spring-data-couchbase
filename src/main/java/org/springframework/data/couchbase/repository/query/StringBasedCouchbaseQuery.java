@@ -62,7 +62,7 @@ public class StringBasedCouchbaseQuery extends AbstractCouchbaseQuery {
 		this.evaluationContextProvider = evaluationContextProvider;
 
 		if (hasAmbiguousProjectionFlags(isCountQuery(), isExistsQuery(), isDeleteQuery())) {
-			throw new IllegalArgumentException(String.format(COUNT_EXISTS_AND_DELETE, method));
+			throw new IllegalArgumentException(COUNT_EXISTS_AND_DELETE.formatted(method));
 		}
 		this.namedQueries = namedQueries;
 	}

@@ -38,8 +38,8 @@ public class TemplateUtils {
 	private static PersistenceExceptionTranslator exceptionTranslator = new CouchbaseExceptionTranslator();
 
 	public static Throwable translateError(Throwable e) {
-		if (e instanceof RuntimeException) {
-			return exceptionTranslator.translateExceptionIfPossible((RuntimeException) e);
+		if (e instanceof RuntimeException exception) {
+			return exceptionTranslator.translateExceptionIfPossible(exception);
 		} else if (e instanceof TimeoutException) {
 			return new QueryTimeoutException(e.getMessage(), e);
 		} else if (e instanceof InterruptedException) {

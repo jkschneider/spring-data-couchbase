@@ -182,8 +182,10 @@ public class ReactiveCouchbaseRepositoryQueryIntegrationTests extends JavaIntegr
 				.findPolicySnapshotByPolicyIdAndEffectiveDateTime(policyId, effectiveDateTime.toEpochMilli())
 				// .map(Airport::getEntity)
 				.doOnError(
-						error -> System.out.println("MSG='Exception happened while retrieving Policy by Id and effectiveDateTime', "
-								+ "policyId={}, effectiveDateTime={}"));
+						error -> System.out.println("""
+								MSG='Exception happened while retrieving Policy by Id and effectiveDateTime', \
+								policyId={}, effectiveDateTime={}\
+								"""));
 	}
 
 	@Test

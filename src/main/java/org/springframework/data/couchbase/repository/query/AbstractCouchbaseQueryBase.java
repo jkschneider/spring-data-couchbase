@@ -75,8 +75,8 @@ public abstract class AbstractCouchbaseQueryBase<CouchbaseOperationsType> implem
 
 		EntityMetadata<?> metadata = method.getEntityInformation();
 		Class<?> type = metadata.getJavaType();
-		this.findOperationWithProjection = operations instanceof CouchbaseOperations
-				? ((CouchbaseOperations) operations).findByQuery(type)
+		this.findOperationWithProjection = operations instanceof CouchbaseOperations co
+				? co.findByQuery(type)
 				: null; // not yet implemented for Reactive
 	}
 

@@ -107,7 +107,7 @@ public class ReactiveRemoveByIdOperationSupport implements ReactiveRemoveByIdOpe
 			ReactiveCollection rc = clientFactory.withScope(pArgs.getScope()).getCollection(pArgs.getCollection()).reactive();
 
 			return TransactionalSupport.checkForTransactionInThreadLocalStorage().flatMap(s -> {
-				if (!s.isPresent()) {
+				if (s.isEmpty()) {
 					return rc.remove(id.toString(), buildRemoveOptions(pArgs.getOptions()))
 							.map(r -> RemoveResult.from(id.toString(), r));
 				} else {
@@ -131,8 +131,8 @@ public class ReactiveRemoveByIdOperationSupport implements ReactiveRemoveByIdOpe
 
 				}
 			}).onErrorMap(throwable -> {
-				if (throwable instanceof RuntimeException) {
-					return template.potentiallyConvertRuntimeException((RuntimeException) throwable);
+				if (throwable instanceof RuntimeException exception) {
+					return template.potentiallyConvertRuntimeException(exception);
 				} else {
 					return throwable;
 				}

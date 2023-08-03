@@ -171,8 +171,8 @@ public class MappingCouchbaseConverter extends AbstractCouchbaseConverter implem
 	 * @return the target collection.
 	 */
 	protected static Collection<?> asCollection(final Object source) {
-		if (source instanceof Collection) {
-			return (Collection<?>) source;
+		if (source instanceof Collection collection) {
+			return collection;
 		}
 
 		return source.getClass().isArray() ? CollectionUtils.arrayToList(source) : Collections.singleton(source);
@@ -370,10 +370,10 @@ public class MappingCouchbaseConverter extends AbstractCouchbaseConverter implem
 			}
 
 			TypeInformation<?> valueType = type.getMapValueType();
-			if (value instanceof CouchbaseDocument) {
-				map.put(key, read(valueType, (CouchbaseDocument) value, parent));
-			} else if (value instanceof CouchbaseList) {
-				map.put(key, readCollection(valueType, (CouchbaseList) value, parent));
+			if (value instanceof CouchbaseDocument document) {
+				map.put(key, read(valueType, document, parent));
+			} else if (value instanceof CouchbaseList list) {
+				map.put(key, readCollection(valueType, list, parent));
 			} else {
 				Class<?> valueClass = valueType == null ? null : valueType.getType();
 				map.put(key, getPotentiallyConvertedSimpleRead(value, valueClass));
@@ -500,8 +500,8 @@ public class MappingCouchbaseConverter extends AbstractCouchbaseConverter implem
 	}
 
 	private String convertToString(Object propertyObj) {
-		if (propertyObj instanceof String) {
-			return (String) propertyObj;
+		if (propertyObj instanceof String string) {
+			return string;
 		} else if (propertyObj instanceof Number) {
 			return new StringBuffer().append(propertyObj).toString();
 		} else {
@@ -810,10 +810,10 @@ public class MappingCouchbaseConverter extends AbstractCouchbaseConverter implem
 
 			Object dbObjItem = source.get(i);
 
-			if (dbObjItem instanceof CouchbaseDocument) {
-				items.add(read(componentType, (CouchbaseDocument) dbObjItem, parent));
-			} else if (dbObjItem instanceof CouchbaseList) {
-				items.add(readCollection(componentType, (CouchbaseList) dbObjItem, parent));
+			if (dbObjItem instanceof CouchbaseDocument document) {
+				items.add(read(componentType, document, parent));
+			} else if (dbObjItem instanceof CouchbaseList list) {
+				items.add(readCollection(componentType, list, parent));
 			} else {
 				items.add(getPotentiallyConvertedSimpleRead(dbObjItem, rawComponentType));
 			}
@@ -843,8 +843,7 @@ public class MappingCouchbaseConverter extends AbstractCouchbaseConverter implem
 	private void writeSimpleInternal(final CouchbasePersistentProperty source,
 			final ConvertingPropertyAccessor<Object> accessor, final CouchbaseDocument target, final String key) {
 		Object result = getPotentiallyConvertedSimpleWrite(source, accessor);
-		if (result instanceof Optional) {
-			Optional<Object> optional = (Optional) result;
+		if (result instanceof Optional optional) {
 			result = optional.orElse(null);
 		}
 		target.put(maybeMangle(source), result);
@@ -904,8 +903,8 @@ public class MappingCouchbaseConverter extends AbstractCouchbaseConverter implem
 			setEntityCallbacks(EntityCallbacks.create(applicationContext));
 		}
 		ClassLoader classLoader = applicationContext.getClassLoader();
-		if (this.typeMapper instanceof BeanClassLoaderAware && classLoader != null) {
-			((BeanClassLoaderAware) this.typeMapper).setBeanClassLoader(classLoader);
+		if (this.typeMapper instanceof BeanClassLoaderAware aware && classLoader != null) {
+			aware.setBeanClassLoader(classLoader);
 		}
 	}
 
@@ -938,10 +937,10 @@ public class MappingCouchbaseConverter extends AbstractCouchbaseConverter implem
 
 		if (conversions.hasCustomReadTarget(value.getClass(), rawType)) {
 			return (R) conversionService.convert(value, rawType);
-		} else if (value instanceof CouchbaseDocument) {
-			return (R) read(type, (CouchbaseDocument) value, parent);
-		} else if (value instanceof CouchbaseList) {
-			return (R) readCollection(type, (CouchbaseList) value, parent);
+		} else if (value instanceof CouchbaseDocument document) {
+			return (R) read(type, document, parent);
+		} else if (value instanceof CouchbaseList list) {
+			return (R) readCollection(type, list, parent);
 		} else {
 			return (R) getPotentiallyConvertedSimpleRead(value, type.getType()); // type does not have annotations
 		}
@@ -971,11 +970,11 @@ public class MappingCouchbaseConverter extends AbstractCouchbaseConverter implem
 			TypeInformation ti = TypeInformation.of(value.getClass());
 			return (R) conversionService.convert(value, ti.toTypeDescriptor(), new TypeDescriptor(prop.getField()));
 		}
-		if (value instanceof CouchbaseDocument) {
-			return (R) read(prop.getTypeInformation(), (CouchbaseDocument) value, parent);
+		if (value instanceof CouchbaseDocument document) {
+			return (R) read(prop.getTypeInformation(), document, parent);
 		}
-		if (value instanceof CouchbaseList) {
-			return (R) readCollection(prop.getTypeInformation(), (CouchbaseList) value, parent);
+		if (value instanceof CouchbaseList list) {
+			return (R) readCollection(prop.getTypeInformation(), list, parent);
 		}
 		return (R) getPotentiallyConvertedSimpleRead(value, prop);// passes PersistentProperty with annotations
 
@@ -1102,7 +1101,7 @@ public class MappingCouchbaseConverter extends AbstractCouchbaseConverter implem
 					value = source.get(property.getFieldName());
 					noDecrypt = true;
 				} else if (value != null
-						&& !((value instanceof CouchbaseDocument) && (((CouchbaseDocument) value)).containsKey("kid"))) {
+						&& !((value instanceof CouchbaseDocument document) && (document).containsKey("kid"))) {
 					noDecrypt = true;
 					// TODO - should we throw an exception, or just ignore the problem of not being encrypted with noDecrypt=true?
 					throw new RuntimeException("should have been encrypted, but is not " + maybeFieldName);
@@ -1126,8 +1125,8 @@ public class MappingCouchbaseConverter extends AbstractCouchbaseConverter implem
 		}
 		PropertyValueConverter<?, ?, ?> propertyValueConverter = conversions.getPropertyValueConversions()
 				.getValueConverter((CouchbasePersistentProperty) property);
-		CryptoManager cryptoManager = propertyValueConverter != null && propertyValueConverter instanceof CryptoConverter
-				? ((CryptoConverter) propertyValueConverter).cryptoManager()
+		CryptoManager cryptoManager = propertyValueConverter != null && propertyValueConverter instanceof CryptoConverter cc
+				? cc.cryptoManager()
 				: null;
 		String fname = ((CouchbasePersistentProperty) property).getFieldName();
 		return cryptoManager != null ? cryptoManager.mangle(fname) : fname;

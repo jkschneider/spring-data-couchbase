@@ -89,8 +89,8 @@ public class ReactiveFindFromReplicasByIdOperationSupport implements ReactiveFin
 					.flatMap(result -> support.decodeEntity(id, result.contentAs(String.class), result.cas(), returnType,
 							pArgs.getScope(), pArgs.getCollection(), null, null))
 					.onErrorMap(throwable -> {
-						if (throwable instanceof RuntimeException) {
-							return template.potentiallyConvertRuntimeException((RuntimeException) throwable);
+						if (throwable instanceof RuntimeException exception) {
+							return template.potentiallyConvertRuntimeException(exception);
 						} else {
 							return throwable;
 						}

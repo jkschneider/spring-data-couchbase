@@ -205,7 +205,7 @@ public class CouchbaseCacheManager extends AbstractTransactionSupportingCacheMan
 
 			Assert.notNull(cacheConfigurations, "CacheConfigurations must not be null!");
 			cacheConfigurations.forEach((cacheName, configuration) -> Assert.notNull(configuration,
-					String.format("CouchbaseCacheConfiguration for cache %s must not be null!", cacheName)));
+			"CouchbaseCacheConfiguration for cache %s must not be null!".formatted(cacheName)));
 
 			this.initialCaches.putAll(cacheConfigurations);
 			return this;

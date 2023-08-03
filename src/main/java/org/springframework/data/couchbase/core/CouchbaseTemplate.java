@@ -76,8 +76,7 @@ public class CouchbaseTemplate implements CouchbaseOperations, ApplicationContex
 		this.scanConsistency = scanConsistency;
 
 		this.mappingContext = this.converter.getMappingContext();
-		if (mappingContext instanceof CouchbaseMappingContext) {
-			CouchbaseMappingContext cmc = (CouchbaseMappingContext) mappingContext;
+		if (mappingContext instanceof CouchbaseMappingContext cmc) {
 			if (cmc.isAutoIndexCreation()) {
 				indexCreator = new CouchbasePersistentEntityIndexCreator(cmc, this);
 			}
@@ -264,10 +263,9 @@ public class CouchbaseTemplate implements CouchbaseOperations, ApplicationContex
 			}
 		}
 
-		if (context instanceof ConfigurableApplicationContext && indexCreator != null) {
-			((ConfigurableApplicationContext) context).addApplicationListener(indexCreator);
-			if (mappingContext instanceof CouchbaseMappingContext) {
-				CouchbaseMappingContext cmc = (CouchbaseMappingContext) mappingContext;
+		if (context instanceof ConfigurableApplicationContext applicationContext && indexCreator != null) {
+			applicationContext.addApplicationListener(indexCreator);
+			if (mappingContext instanceof CouchbaseMappingContext cmc) {
 				cmc.setIndexCreator(indexCreator);
 			}
 		}

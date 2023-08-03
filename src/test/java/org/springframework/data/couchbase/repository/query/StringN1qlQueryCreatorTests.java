@@ -206,9 +206,11 @@ class StringN1qlQueryCreatorTests {
 
 		Query query = creator.createQuery();
 
-		assertEquals("SELECT `_class`, `jsonNode`, `jsonObject`, `jsonArray`, META(`myCollection`).`cas`"
-				+ " AS __cas, `createdBy`, `createdDate`, `lastModifiedBy`, `lastModifiedDate`, META(`myCollection`).`id`"
-				+ " AS __id, `firstname`, `lastname`, `subtype` FROM `myCollection`|`_class` = \"abstractuser\"|`myCollection`|`myScope`|`myCollection`",
+		assertEquals("""
+				SELECT `_class`, `jsonNode`, `jsonObject`, `jsonArray`, META(`myCollection`).`cas`\
+				 AS __cas, `createdBy`, `createdDate`, `lastModifiedBy`, `lastModifiedDate`, META(`myCollection`).`id`\
+				 AS __id, `firstname`, `lastname`, `subtype` FROM `myCollection`|`_class` = "abstractuser"|`myCollection`|`myScope`|`myCollection`\
+				""",
 				query.toN1qlSelectString(converter, bucketName(), "myScope", "myCollection", User.class, null, false, null,
 						null));
 	}

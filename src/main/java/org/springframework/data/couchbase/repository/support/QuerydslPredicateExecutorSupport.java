@@ -79,8 +79,8 @@ public class QuerydslPredicateExecutorSupport<T> {
 	 */
 	protected List<OrderSpecifier<?>> toOrderSpecifiers(Sort sort) {
 
-		if (sort instanceof QSort) {
-			return ((QSort) sort).getOrderSpecifiers();
+		if (sort instanceof QSort qSort) {
+			return qSort.getOrderSpecifiers();
 		}
 
 		return sort.stream().map(this::toOrder).collect(Collectors.toList());

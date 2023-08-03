@@ -92,7 +92,7 @@ public class ReactiveRemoveByQueryOperationSupport implements ReactiveRemoveByQu
 
 			return TransactionalSupport.checkForTransactionInThreadLocalStorage().flatMapMany(transactionContext -> {
 
-				if (!transactionContext.isPresent()) {
+				if (transactionContext.isEmpty()) {
 					QueryOptions opts = buildQueryOptions(pArgs.getOptions());
 					return (pArgs.getScope() == null ? clientFactory.getCluster().reactive().query(statement, opts)
 							: rs.query(statement, opts)).flatMapMany(ReactiveQueryResult::rowsAsObject)

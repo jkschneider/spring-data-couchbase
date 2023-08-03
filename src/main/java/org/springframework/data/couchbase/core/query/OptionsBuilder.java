@@ -134,10 +134,10 @@ public class OptionsBuilder {
 		}
 
 		Object value = optsJson.get("args");
-		if(value instanceof JsonObject){
-			txOptions.parameters((JsonObject)value);
-		}else if(value instanceof JsonArray) {
-			txOptions.parameters((JsonArray) value);
+		if(value instanceof JsonObject object){
+			txOptions.parameters(object);
+		}else if(value instanceof JsonArray array) {
+			txOptions.parameters(array);
 		} else  if(value != null) {
       throw InvalidArgumentException.fromMessage(
           "non-null args property was neither JsonObject(namedParameters) nor JsonArray(positionalParameters) "

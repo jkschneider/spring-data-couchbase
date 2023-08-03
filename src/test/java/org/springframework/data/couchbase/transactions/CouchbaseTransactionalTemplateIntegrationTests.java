@@ -381,10 +381,10 @@ public class CouchbaseTransactionalTemplateIntegrationTests extends JavaIntegrat
 			assertInAnnotationTransaction(true);
 			long currentThreadId = Thread.currentThread().getId();
 			System.out
-					.println(String.format("Thread %d %s", Thread.currentThread().getId(), Thread.currentThread().getName()));
+					.println("Thread %d %s".formatted(Thread.currentThread().getId(), Thread.currentThread().getName()));
 			Person ret = personOperations.insertById(Person.class).one(person);
-			System.out.println(String.format("Thread %d (was %d) %s", Thread.currentThread().getId(), currentThreadId,
-					Thread.currentThread().getName()));
+			System.out.println("Thread %d (was %d) %s".formatted(Thread.currentThread().getId(), currentThreadId,
+			Thread.currentThread().getName()));
 			if (currentThreadId != Thread.currentThread().getId()) {
 				throw new IllegalStateException();
 			}

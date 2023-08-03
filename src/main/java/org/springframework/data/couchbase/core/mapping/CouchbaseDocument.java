@@ -171,10 +171,10 @@ public class CouchbaseDocument implements CouchbaseStorable {
 
 		int totalSize = thisSize;
 		for (Object value : content.values()) {
-			if (value instanceof CouchbaseDocument) {
-				totalSize += ((CouchbaseDocument) value).size(true);
-			} else if (value instanceof CouchbaseList) {
-				totalSize += ((CouchbaseList) value).size(true);
+			if (value instanceof CouchbaseDocument document) {
+				totalSize += document.size(true);
+			} else if (value instanceof CouchbaseList list) {
+				totalSize += list.size(true);
 			}
 		}
 

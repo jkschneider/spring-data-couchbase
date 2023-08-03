@@ -63,10 +63,10 @@ public abstract class AbstractN1qlBasedQuery implements RepositoryQuery {
 			QueryScanConsistency scanConsistency) {
 		QueryOptions opts = QueryOptions.queryOptions().scanConsistency(scanConsistency);
 
-		if (queryPlaceholderValues instanceof JsonObject && !((JsonObject) queryPlaceholderValues).isEmpty()) {
-			opts.parameters((JsonObject) queryPlaceholderValues);
-		} else if (queryPlaceholderValues instanceof JsonArray && !((JsonArray) queryPlaceholderValues).isEmpty()) {
-			opts.parameters((JsonArray) queryPlaceholderValues);
+		if (queryPlaceholderValues instanceof JsonObject object && !object.isEmpty()) {
+			opts.parameters(object);
+		} else if (queryPlaceholderValues instanceof JsonArray array && !array.isEmpty()) {
+			opts.parameters(array);
 		}
 
 		return new N1QLQuery(expression, opts);

@@ -59,12 +59,12 @@ final class ResultProcessingConverter<CouchbaseOperationsType> implements Conver
 
 		if (isVoid(returnedType)) {
 
-			if (source instanceof Mono) {
-				return ((Mono<?>) source).then();
+			if (source instanceof Mono mono) {
+				return mono.then();
 			}
 
-			if (source instanceof Publisher) {
-				return Flux.from((Publisher<?>) source).then();
+			if (source instanceof Publisher publisher) {
+				return Flux.from(publisher).then();
 			}
 		}
 
@@ -72,8 +72,8 @@ final class ResultProcessingConverter<CouchbaseOperationsType> implements Conver
 			return source;
 		}
 
-		CouchbaseConverter cvtr = operations instanceof CouchbaseOperations
-				? ((CouchbaseOperations) operations).getConverter()
+		CouchbaseConverter cvtr = operations instanceof CouchbaseOperations co
+				? co.getConverter()
 				: ((ReactiveCouchbaseOperations) operations).getConverter();
 		if (!cvtr.getMappingContext().hasPersistentEntityFor(returnedType.getReturnedType())) {
 			return source;

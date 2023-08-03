@@ -99,8 +99,8 @@ public class BasicCouchbasePersistentProperty extends AnnotationBasedPersistentP
 		String fName = fieldNamingStrategy.getFieldName(this);
 
 		if (!StringUtils.hasText(fName)) {
-			throw new MappingException(String.format("Invalid (null or empty) field name returned for property %s by %s!",
-					this, fieldNamingStrategy.getClass()));
+			throw new MappingException("Invalid (null or empty) field name returned for property %s by %s!".formatted(
+			this, fieldNamingStrategy.getClass()));
 		}
 
 		return fieldName = fName;

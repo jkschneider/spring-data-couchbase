@@ -116,7 +116,7 @@ public class SpringDataCouchbaseSerializer extends CouchbaseDocumentSerializer {
 	@Override
 	protected QueryCriteriaDefinition asDocument(@Nullable String key, @Nullable Object value) {
 
-		value = value instanceof Optional ? ((Optional) value).orElse(null) : value;
+		value = value instanceof Optional o ? o.orElse(null) : value;
 
 		return super.asDocument(key, value instanceof Pattern ? value : converter.convertForWriteIfNeeded(value));
 	}
